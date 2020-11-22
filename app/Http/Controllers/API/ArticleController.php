@@ -5,6 +5,10 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Article;
+use App\Http\Resources\ArticleCollection;
+use App\Http\Resources\ArticleResource;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Response;
 
 class ArticleController extends BaseController
 {
@@ -15,7 +19,7 @@ class ArticleController extends BaseController
      */
     public function index()
     {
-        return Article::paginate(5);
+        return new ArticleCollection(Article::paginate(8));
     }
 
 
@@ -34,19 +38,20 @@ class ArticleController extends BaseController
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string $slug
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        return Article::find($id);
+        $article = Article::where('slug', $slug)->firstOrFail();
+        return new ArticleResource($article);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Article $article
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Article $article)
@@ -59,12 +64,12 @@ class ArticleController extends BaseController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Article $article
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($article)
     {
-        $response = ['message' =>  'destroy function'];
-        return response($response, 200);
+        $article->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }

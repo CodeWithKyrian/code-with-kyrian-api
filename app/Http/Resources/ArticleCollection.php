@@ -4,9 +4,9 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class ProductCollection extends ResourceCollection
+class ArticleCollection extends ResourceCollection
 {
-    public static $wrap = 'products';
+    public static $wrap = 'articles';
     /**
      * Transform the resource collection into an array.
      *
@@ -16,7 +16,7 @@ class ProductCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'products' => ProductResource::collection($this->collection)
+            'articles' => ArticleResource::collection($this->collection)
         ];
     }
 }

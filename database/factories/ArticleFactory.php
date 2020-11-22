@@ -24,7 +24,9 @@ class ArticleFactory extends Factory
     {
         return [
             "title" => $this->faker->sentence(3),
+            "description" => $this->faker->paragraph(3),
             "body" => $this->faker->paragraph(100),
+            "tags" => json_encode([$this->faker->word(), $this->faker->word(), $this->faker->word()]),
             "user_id" => function () {
                 return \App\Models\User::all()->random();
             }
